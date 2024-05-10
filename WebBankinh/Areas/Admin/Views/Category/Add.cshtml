@@ -1,0 +1,131 @@
+﻿@model WebBankinh.Models.EF.BienTheSanPham
+@{
+    ViewBag.Title = "Thêm Mới Sản Phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home" class="nav-link">Trang Chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/Category" class="nav-link">Sản Phẩm</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">Thêm Mới</a>
+        </li>
+    </ul>
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Thêm Mới Sản Phẩm</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Sản Phẩm</a></li>
+                    <li class="breadcrumb-item active">Thêm Mới</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Thông Tin Thêm Mới Sản Phẩm</h3>
+
+
+        </div>
+        <div class="card-body">
+            <div class="bs-stepper-content">
+                @using (Html.BeginForm("Add", "Category", FormMethod.Post, new { }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <!-- your steps content here -->
+                    <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
+                        @*<div class="form-group">
+                            <label for="exampleInputPassword1">STT</label>
+                            @Html.TextBoxFor(x => x.Id, new { @class = "form-control", @Value = "1" })
+                        </div>*@
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Tên Sản Phẩm</label>
+                            @Html.TextBoxFor(x => x.SanPham.TenSanPham, new { @class = "form-control", @placeholder = "Tên Sản Phẩm" })
+                            @Html.ValidationMessageFor(x => x.SanPham.TenSanPham, null, new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmaill">Loại Sản Phẩm</label>                        
+                            @Html.DropDownListFor(x => x.SanPham.IdLoaiSanPham, ViewBag.LoaiSanPham as SelectList, "-Chọn loại sản phẩm-", new { @class = "form-control", @placeholder = "Mã mã phẩm" })
+                            @Html.ValidationMessageFor(x => x.SanPham.IdLoaiSanPham, null, new { @class = "text-danger" })                           
+                        </div>
+                        <div class="form-group">
+                        <label for="exampleInputFile">Hình Ảnh</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                @Html.TextBoxFor(x => x.HinhAnh.DuongDan, new { @id = "txtHinhAnh", @class = "form-control" })
+                            </div>
+                            <div class="input-group-append">
+                                <input type="button" value="Tải ảnh" onclick="BrowseServer('txtHinhAnh');" />
+                            </div>
+                        </div>
+                    </div>                       
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Giá Bán</label>
+                            @Html.TextBoxFor(x => x.GiaBan, new { @class = "form-control" })
+
+                        </div>
+                        <div class="form-group"> 
+                            <label for="exampleInputPassword1">Khuyến Mãi</label>
+                            @Html.TextBoxFor(x => x.KhuyenMai, new { @class = "form-control" })     
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Ghi Chú</label>
+                            @Html.TextAreaFor(x => x.SanPham.GhiChu, new { @class = "form-control"@*, @id="txtGhiChu"*@ })
+                        </div>
+                        <div class="form-group">
+                            <a href="/admin/category" class="btn btn-danger">Trở Về</a>
+                            <button type="submit" class="btn btn-primary">Thêm Sản Phẩm</button>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+@section scripts{
+    <script>
+/*        $(document).ready(function () {
+            CKDITOR.replace('txtGhiChu', {
+                customConfig: '/content/ckeditor/config.js',
+                extraAllowedContent: 'span',
+            });
+        });*/
+        function BrowseServer(field) {
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (fileUrl) {
+                document.getElementById(field).value = fileUrl;
+            };
+            finder.popup();
+        }
+    </script>
+    }

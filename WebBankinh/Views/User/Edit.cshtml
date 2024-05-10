@@ -1,0 +1,97 @@
+﻿@model WebBankinh.Models.EF.NguoiDung
+@{
+    ViewBag.Title = "Index";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/GiaoDien/styles/contact_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/GiaoDien/styles/contact_responsive.css">
+
+<div class="container contact_container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a href="/">Trang Chủ</a></li>
+                    <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Người dùng</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    @*
+        <div class="blogs">
+            <div class="container">
+                <div class="row">*@
+    <div class="col text-center">
+        <div class="section_title">
+            <h2>TRANG NGƯỜI DÙNG</h2>
+        </div>
+    </div>
+    @*</div>*@
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Thông tin người dùng</h3>
+
+                <div class="card-tools">
+                    @* <a href="#" class="btn btn-primary">Thêm Mới</a>*@
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="bs-stepper-content">
+                    @using (Html.BeginForm("Edit", "user", FormMethod.Post, new { }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        @Html.HiddenFor(x => x.Id)
+                        <!-- your steps content here -->
+                        <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Họ tên</label>
+                                @Html.TextBoxFor(x => x.Name, new { @class = "form-control", @placeholder = "Họ Tên" })
+                                @Html.ValidationMessageFor(x => x.Name, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Địa chỉ</label>
+                                @Html.TextBoxFor(x => x.DiaChi, new { @class = "form-control", @placeholder = "Địa chỉ" })
+                                @Html.ValidationMessageFor(x => x.DiaChi, null, new { @class = "text-danger" })
+
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Số điện thoại</label>
+                                @Html.TextBoxFor(x => x.SoDienThoai, new { @class = "form-control", @placeholder = "" })
+                                @Html.ValidationMessageFor(x => x.SoDienThoai, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Email</label>
+                                @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @placeholder = "" })
+                                @Html.ValidationMessageFor(x => x.Email, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <a href="/user" class="btn btn-danger">Trở Về</a>
+                                <button type="submit" class="btn btn-primary">Sửa</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @*<a href="/Account/ResetPassword" class="btn btn-sm btn-primary">Sửa</a>*@
+
+            <!-- /.card-body -->
+            <div class="card-footer">
+
+            </div>
+            <!-- /.card-footer-->
+        </div>
+                <!-- /.card -->
+
+        </section>
+
+        @section scripts{
+            <script src="~/Content/GiaoDien/js/contact_custom.js"></script>
+        }

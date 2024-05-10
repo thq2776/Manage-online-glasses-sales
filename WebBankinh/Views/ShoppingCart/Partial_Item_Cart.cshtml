@@ -1,0 +1,60 @@
+﻿@model IEnumerable<WebBankinh.Models.ShoppingCart.ShoppingCartItem>
+<table class="table">
+    <tr class="text-center">
+        <th>STT</th>
+        <th>Tên sản phẩm</th>
+        <th>Ảnh sản phẩm</th>
+        <th>Loại Sản Phẩm</th>
+        <th>Giá</th>
+
+        <th style="width:100px;">Số lượng</th>
+        <th>Thành tiền</th>
+        <th style="width:200px;">
+
+        </th>
+    </tr>
+    @if (Model != null && Model.Any())
+    {
+        var i = 0;
+        double? TongTien = 0;
+        foreach (var item in Model)
+        {
+            <tr class="text-center">
+                <td>@(i+1)</td>
+                <td>@item.TenSanPham</td>
+                <td><img src="@item.HinhAnh" width="100" /></td>
+                <td>@item.TenLoaiSanPham</td>
+                <td>@string.Format("{0:#,##0} VNĐ", item.GiaBan)</td> @*//Chưa lấy được giá bán khi giảm*@
+                <td><input type="number" class="form-control" id="SoLuong_@item.IdSanPham" min="1" value="@item.SoLuong" /></td>
+                <td>@string.Format("{0:#,##0} VNĐ", item.TongGiaBan)</td>
+                <td>
+                    <a href="#" data-id="@item.IdSanPham" class="btn btn-sm btn-danger btnDelete">Xóa</a>
+                    <button data-id="@item.IdSanPham" class="btn btn-sm btn-success btnUpdate">Cập nhật</button>
+                </td>
+            </tr>
+            TongTien = TongTien + item.TongGiaBan;
+            i++;
+        }
+        <tr>
+            <th colspan="6" class="text-right">Tổng: </th>
+            <th class="text-center">@string.Format("{0:#,##0} VNĐ", TongTien)</th>
+            <th></th>
+        </tr>
+@*        <h4>Chọn hình thức để thanh toán</h4>
+        <div class="form-group">
+            <label>Hình thức thanh toán</label>
+            <select class="form-control" name="TypePayment">
+                <option value="1" selected>COD</option>
+                <option value="2">Momo</option>
+            </select>
+        </div>*@
+    }
+    else
+    {
+        <tr>
+            <th colspan="7">Không có sản phẩm trong giỏ hàng!!</th>
+        </tr>
+    }
+</table>
+
+

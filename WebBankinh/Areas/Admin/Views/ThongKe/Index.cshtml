@@ -1,0 +1,148 @@
+﻿@model WebBankinh.Models.Dtos.ThongKeDto
+@{
+    ViewBag.Title = "Index";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Thống kê</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Thống kê</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Thống kê danh thu</h3>
+
+            @*<div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>*@
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div style="background-color: #f0f0f0; color: #333; font-size: 18px; padding: 20px;">
+                        Doanh thu ngày
+                    </div>
+                    <div style="background-color: #f0f0f0; color: #333; font-size: 18px; padding: 20px;">
+                        @string.Format("{0:#,##0} VNĐ", Model.DoanhThuNgay)
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div style="background-color: #f0f0f0; color: #333; font-size: 18px; padding: 20px;">
+                        Doanh thu tháng
+                    </div>
+                    <div style="background-color: #f0f0f0; color: #333; font-size: 18px; padding: 20px;">
+                        @string.Format("{0:#,##0} VNĐ", Model.DoanhThuThang)
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div style="background-color: #f0f0f0; color: #333; font-size: 18px; padding: 20px;">
+                        Doanh thu năm
+                    </div>
+                    <div style="background-color: #f0f0f0; color: #333; font-size: 18px; padding: 20px;">
+                        @string.Format("{0:#,##0} VNĐ", Model.DoanhThuNam)
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="chart">
+                                <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                @*        <div class="card-footer">
+                        Footer
+                    </div>*@
+                <!-- /.card-footer-->
+            </div>
+            <!-- /.card -->
+
+</section>
+<!-- /.content -->
+@section scripts{
+    <script src="~/Content/Clinets/plugins/chart.js/Chart.min.js"></script>
+    <script src="~/Content/GiaoDien/plugins/moment/moment.min.js"></script>
+    <script>
+        $(function () {
+            var chartData = @Html.Raw(Json.Encode(Model.ChartThongKe));
+
+            var labels = [];
+            var data = [];
+
+            console.log('chartData', chartData);
+            for (var i = 1; i <= 12; i++) {
+                var monthData = chartData.find(function (d) { return d.month === i; });
+                if (monthData) {
+                    labels.push('Tháng ' + i);
+                    data.push(monthData.total);
+                } else {
+                    labels.push('Tháng ' + i);
+                    data.push(0);
+                }
+            }
+
+
+            var areaChartData = {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Doanh thu tháng',
+                        backgroundColor: 'rgba(210, 214, 222, 1)',
+                        borderColor: 'rgba(210, 214, 222, 1)',
+                        pointRadius: false,
+                        pointColor: 'rgba(210, 214, 222, 1)',
+                        pointStrokeColor: '#c1c7d1',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(220,220,220,1)',
+                        data: data
+                    },
+                ]
+            }
+
+            //-------------
+            //- BAR CHART -
+            //-------------
+            var barChartCanvas = $('#barChart').get(0).getContext('2d')
+            var barChartData = $.extend(true, {}, areaChartData)
+            var temp0 = areaChartData.datasets[0]
+            barChartData.datasets[0] = temp0
+
+            var barChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                datasetFill: false
+            }
+
+            new Chart(barChartCanvas, {
+                type: 'bar',
+                data: barChartData,
+                options: barChartOptions
+            })
+
+        })
+               
+    </script>
+}

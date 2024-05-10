@@ -1,0 +1,140 @@
+﻿@model IEnumerable<WebBankinh.Models.EF.DonHang>
+@{
+    ViewBag.Title = "Trang Chủ Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home" class="nav-link">Trang Chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/donhang" class="nav-link">Đơn Hàng</a>
+        </li>
+    </ul>
+
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Quản Lý Đơn Hàng</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Trang Chủ</a></li>
+                    <li class="breadcrumb-item active">Đơn Hàng</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Danh sách đơn hàng</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên Khách hàng</th>
+                        <th>Số Lượng</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Phương thức</th>
+                        <th>Ngày tạo</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        var i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr id="trow_@item.Id">
+                                <td>@i</td>
+                                <td>@item.NguoiDung.Name</td>
+                                <td>@item.TongSoLuong</td>
+                                <td>@string.Format("{0:#,##0} VNĐ", item.TongTien)</td>
+                                @if (@item.DaThanhToan == 0)
+                                {
+                                    <td style="color: blue">Chưa thanh toán</td>
+                                }
+                                else if (@item.DaThanhToan == 1)
+                                {
+                                    <td style="color: green">Đã thanh toán</td>
+                                }
+                                else
+                                {
+                                    <td style="color: red">Đã huỷ</td>
+                                }
+                                <td>@item.PhuongThucThanhToan.TenPhuongThuc</td>
+                                <td>@item.NgayTaoDonhang</td>
+                                <td>
+                                    <a href="/admin/donhang/chitiet/@item.Id" class="btn btn-sm btn-primary">Chi tiết đơn hàng</a>
+                                    <a href="/admin/donhang/duyet/@item.Id" class="btn btn-sm btn-primary">Duyệt</a>
+                                    <a href="/admin/donhang/huy/@item.Id" class="btn btn-sm btn-danger btnDelete">Huỷ</a>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4">Không có bản ghi nào</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6" style="text-align:right;">
+
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('body').on('click', '.btnDelete', function () {
+                var id = $(this).data("id");
+                var conf = confirm('Bạn có muốn huỷ đơn này không ?');
+                if (conf === true) {
+                    $.ajax({
+                        url: '/admin/DonHang/Delete',
+                        type: 'POST',
+                        data: { id: id },
+                        success: function (rs) {
+                            if (rs.success) {
+                                $('#trow_' + id).remove();
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+}
